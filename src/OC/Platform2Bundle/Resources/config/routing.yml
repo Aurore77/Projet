@@ -1,3 +1,23 @@
-hello_the_world:
-    path:     /hello-world
-    defaults: {_controller: OCPlatform2Bundle:Advert:index}
+# Routes Advert
+oc_platform_home:
+    path:      /
+    defaults: { _controller: OCPlatform2Bundle:Advert:index }
+
+oc_platform_view:
+    path:      /advert/{id}
+    defaults: { _controller: OCPlatform2Bundle:Advert:view }
+
+oc_platform_view_slug:
+    path:      /{year}/{slug}.{format}
+    defaults:
+        _controller: OCPlatform2Bundle:Advert:viewSlug
+#        valeur prise par défaut rendant le paramètre facultatif
+        format:   html
+#        contraintes
+    requirements:
+        year:   \d{4}
+        format: html|xml
+
+oc_platform_add:
+    path:      /add
+    defaults: { _controller: OCPlatform2Bundle:Advert:add }
