@@ -33,6 +33,11 @@ oc_platform_delete:
     requirements:
         id: \d+
 
+oc_platform_menu:
+    path:      /menu
+    defaults:
+        _controller: OCPlatform2Bundle:Advert:menu
+
 
 # exemples :
 

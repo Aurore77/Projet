@@ -1,19 +1,25 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Bienvenue sur la première page du projet </title>
-    </head>
-    <body>
-        <h1>Hello {{ nom }}!</h1>
+{% extends "@OCPlatform2/layout.html.twig" %}
 
-        <p>
-            Le Hello World est un grand classique en programmation.
-            Il signifie énormément, car cela veut dire que vous avez
-            réussi à exécuter le programme pour accomplir une tâche simple :
-            afficher ce hello world !
-        </p>
-        {#<a href="{{ path('oc_platform_view', { 'id': advert_id }) }}">#}
-            {#Lien vers l'annonce d'id {{ advert_id }}#}
-        {#</a>#}
-    </body>
-</html>
+{% block title %}
+    Accueil - {{ parent() }}
+{% endblock %}
+
+{% block ocplatform_body %}
+
+    <h2>Liste des annonces</h2>
+
+    <ul>
+        {% for advert in listAdverts %}
+            <li>
+                <a href="{{ path('oc_platform_view', {'id': advert.id}) }}">
+                    {{ advert.title }}
+                </a>
+                par {{ advert.author }},
+                le {{ advert.date|date('d/m/Y') }}
+            </li>
+        {% else %}
+            <li>Pas (encore !) d'annonces</li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}
