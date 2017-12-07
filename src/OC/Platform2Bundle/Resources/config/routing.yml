@@ -3,7 +3,7 @@ oc_platform_home:
     path:      /{page}
     defaults:
         _controller: OCPlatform2Bundle:Advert:index
-        page:        1
+        page:    1
     requirements:
         page: \d*
 
