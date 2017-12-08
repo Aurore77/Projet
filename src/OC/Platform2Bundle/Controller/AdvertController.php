@@ -19,8 +19,6 @@ class AdvertController extends Controller
             throw new NotFoundHttpException('Page "'.$page.'" inexistante.');
         }
 
-        // Ici, on récupérera la liste des annonces, puis on la passera au template
-
         // Notre liste d'annonce en dur
         $listAdverts = array(
             array(
@@ -45,7 +43,7 @@ class AdvertController extends Controller
 
         // Mais pour l'instant, on ne fait qu'appeler le template
         return $this->render('@OCPlatform2/Advert/index.html.twig', array(
-            'listAdverts' => $listAdverts //array()
+            'listAdverts' => $listAdverts,
         ));
     }
 
@@ -68,12 +66,9 @@ class AdvertController extends Controller
     /* Add */
     public function addAction(Request $request)
     {
-        // La gestion d'un formulaire est particulière, mais l'idée est la suivante :
-
         // Si la requête est en POST, c'est que le visiteur a soumis le formulaire
         if ($request->isMethod('POST')) {
             // Ici, on s'occupera de la création et de la gestion du formulaire
-
             $request->getSession()->getFlashBag()->add('notice', 'Annonce bien enregistrée.');
 
             // Puis on redirige vers la page de visualisation de cettte annonce
@@ -87,9 +82,6 @@ class AdvertController extends Controller
     /* Edit */
     public function editAction($id, Request $request)
     {
-        // Ici, on récupérera l'annonce correspondante à $id
-
-        // Même mécanisme que pour l'ajout
         if ($request->isMethod('POST')) {
             $request->getSession()->getFlashBag()->add('notice', 'Annonce bien modifiée.');
 
