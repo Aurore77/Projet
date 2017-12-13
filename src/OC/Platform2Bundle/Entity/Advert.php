@@ -2,6 +2,7 @@
 
 namespace OC\Platform2Bundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -54,6 +55,11 @@ class Advert
      */
     private $published = true;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="OC\Platform2Bundle\Entity\Category", cascade={"persist"})
+     */
+    private $categories;
+
 
     /**
      * Advert constructor.
@@ -62,6 +68,7 @@ class Advert
     {
         // Par défaut, la date de l'annonce est la date d'aujourd'hui
         $this->date = new \DateTime();
+        $this->categories = new ArrayCollection();
     }
 
     /**
@@ -207,7 +214,7 @@ class Advert
      *
      * @return Advert
      */
-    public function setImage(\OC\Platform2Bundle\Entity\Image $image = null)
+    public function setImage(Image $image = null)
     {
         $this->image = $image;
 
@@ -222,5 +229,40 @@ class Advert
     public function getImage()
     {
         return $this->image;
+    }
+
+    /**
+     * Add category
+     *
+     * @param \OC\Platform2Bundle\Entity\Category $category
+     *
+     * @return Advert
+     */
+    public function addCategory(Category $category)
+    {
+        // Ici, on utilise l'ArrayCollection vraiment comme un tableau
+        $this->categories[] = $category;
+
+        return $this;
+    }
+
+    /**
+     * Remove category
+     *
+     * @param \OC\Platform2Bundle\Entity\Category $category
+     */
+    public function removeCategory(Category $category)
+    {
+        $this->categories->removeElement($category);
+    }
+
+    /**
+     * Get categories
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCategories()
+    {
+        return $this->categories;
     }
 }

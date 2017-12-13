@@ -38,6 +38,14 @@ oc_platform_menu:
     defaults:
         _controller: OCPlatform2Bundle:Advert:menu
 
+oc_platform_edit_image:
+    path:      /edit-image/{advertId}
+    defaults:
+        _controller: OCPlatform2Bundle:Advert:editImage
+    requirements:
+        advertId: \d+
+
+
 
 # exemples :
 

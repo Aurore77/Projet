@@ -36,4 +36,19 @@
         </a>
     </p>
 
+
+    {% for application in listApplications %}
+
+        <div class="well">
+            <h4>
+                {{ application.author }}
+            </h4>
+            <p>
+                {{ application.content }}
+            </p>
+        </div>
+
+
+    {% endfor %}
+
 {% endblock %}
