@@ -5,22 +5,30 @@
 {% endblock %}
 
 {% block ocplatform_body %}
-
-    <div class="well">
+    <div style="float: left; margin-right: 1em;">
         {# On vérifie qu'une image soit bien associée à l'annonce #}
         {% if advert.image is not null %}
             <img src="{{ advert.image.url }}" alt="{{ advert.image.alt }}" class="img-rounded" style="max-width: 130px; position: relative; float: left; margin-right: 20px;">
         {% endif %}
-
-        <h2>{{ advert.title }}</h2>
-        <i>Par {{ advert.author }}, le {{ advert.date|date('d/m/Y') }}</i>
     </div>
+
+    <h2>{{ advert.title }}</h2>
+    <i>Par {{ advert.author }}, le {{ advert.date|date('d/m/Y') }}</i>
 
 
     <div class="well">
         {{ advert.content }}
     </div>
 
+    {% if not advert.categories.empty %}
+        <p>
+            Cette annonce est parue dans les catégories suivantes :
+            {% for category in advert.categories %}
+                {{ category.name }}{% if not loop.last %}, {% endif %}
+            {% endfor %}
+        </p>
+    {% endif %}
+    
     <p>
         <a href="{{ path('oc_platform_home') }}" class="btn btn-default">
             <i class="glyphicon glyphicon-chevron-left"></i>

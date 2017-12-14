@@ -1,0 +1,17 @@
+{% extends "@OCPlatform2/layout.html.twig" %}
+
+{% block title %}
+    Supprimer une annonce - {{ parent() }}
+{% endblock %}
+
+{% block ocplatform_body %}
+
+    <h2>Modifier une annonce</h2>
+
+    {{ include("@OCPlatform2/Advert/form.html.twig") }}
+
+    <p>
+        Vous avez supprimé l'annonce existante n° {{ advert.id }}.
+    </p>
+
+{% endblock %}
