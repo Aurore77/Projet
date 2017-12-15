@@ -13,12 +13,6 @@ use Doctrine\ORM\Mapping as ORM;
 class Application
 {
     /**
-     * @ORM\ManyToOne(targetEntity="OC\Platform2Bundle\Entity\Advert")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $advert;
-
-    /**
      * @var int
      *
      * @ORM\Column(name="id", type="integer")
@@ -47,6 +41,12 @@ class Application
      * @ORM\Column(name="date", type="datetimetz")
      */
     private $date;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="OC\Platform2Bundle\Entity\Advert", inversedBy="applications")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $advert;
 
     /**
      * Application constructor.

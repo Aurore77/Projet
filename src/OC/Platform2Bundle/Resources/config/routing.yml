@@ -3,7 +3,7 @@ oc_platform_home:
     path:      /{page}
     defaults:
         _controller: OCPlatform2Bundle:Advert:index
-        page:    1
+        page:        1
     requirements:
         page: \d*
 
@@ -44,18 +44,3 @@ oc_platform_edit_image:
         _controller: OCPlatform2Bundle:Advert:editImage
     requirements:
         advertId: \d+
-
-
-
-# exemples :
-
-#oc_platform_view_slug:
-#    path:      /{year}/{slug}.{format}
-#    defaults:
-#        _controller: OCPlatform2Bundle:Advert:viewSlug
-##        valeur prise par défaut rendant le paramètre facultatif
-#        format:   html
-##        contraintes
-#    requirements:
-#        year:   \d{4}
-#        format: html|xml

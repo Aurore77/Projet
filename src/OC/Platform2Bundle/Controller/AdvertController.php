@@ -3,6 +3,7 @@
 namespace OC\Platform2Bundle\Controller;
 
 use OC\Platform2Bundle\Entity\Advert;
+use OC\Platform2Bundle\Entity\AdvertSkill;
 use OC\Platform2Bundle\Entity\Application;
 use OC\Platform2Bundle\Entity\Image;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -23,7 +24,7 @@ class AdvertController extends Controller
             throw new NotFoundHttpException('Page "'.$page.'" inexistante.');
         }
 
-        // Notre liste d'annonce en dur
+        // Notre liste d'annonces en dur
         $listAdverts = array(
             array(
                 'title'   => 'Recherche développpeur Symfony',
@@ -56,14 +57,6 @@ class AdvertController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
- /*       // On récupère le repository
-        $repository = $em->getRepository('OCPlatform2Bundle:Advert')
-        ;
-
-        // On récupère l'entité correspondante à l'id $id
-        $advert = $repository->find($id);
- */
-
         // On récupère l'annonce $id
         $advert = $em->getRepository('OCPlatform2Bundle:Advert')->find($id);
 
@@ -78,16 +71,26 @@ class AdvertController extends Controller
             ->getRepository('OCPlatform2Bundle:Application')
             ->findBy(array('advert' => $advert));
 
+        // On récupère maintenant la liste des AdvertSkill
+        $listAdvertSkills = $em
+            ->getRepository('OCPlatform2Bundle:AdvertSkill')
+            ->findBy(array('advert' => $advert))
+        ;
+
         // Le render ne change pas, on passait avant un tableau, maintenant un objet
         return $this->render('@OCPlatform2/Advert/view.html.twig', array(
             'advert' => $advert,
-            'listApplications' => $listApplications
+            'listApplications' => $listApplications,
+            'listAdvertSkills' => $listAdvertSkills
         ));
     }
 
     /* Add */
     public function addAction(Request $request)
     {
+        // On récupère l'EntityManager
+        $em = $this->getDoctrine()->getManager();
+
         // Création de l'entité
         $advert = new Advert();
         $advert->setTitle('Recherche développeur Symfony.');
@@ -95,6 +98,8 @@ class AdvertController extends Controller
         $advert->setContent("Nous recherchons un développeur Symfony débutant sur Lyon. Blabla…");
         // On peut ne pas définir ni la date ni la publication,
         // car ces attributs sont définis automatiquement dans le constructeur
+
+
 
         $image = new Image();
         $image->setUrl('http://boostersoncv.com/wp-content/uploads/2014/05/Dream-job.png');
@@ -117,10 +122,28 @@ class AdvertController extends Controller
         $application1->setAdvert($advert);
         $application2->setAdvert($advert);
 
-        // On récupère l'EntityManager
-        $em = $this->getDoctrine()->getManager();
+        // On récupère toutes les compétences possibles
+        $listSkills = $em->getRepository('OCPlatform2Bundle:Skill')->findAll();
+
+        // Pour chaque compétence
+        foreach ($listSkills as $skill){
+            // On créé une nouvelle "relation entre une annonce et une compétence
+            $advertSkill = new AdvertSkill();
+
+            // on la lie à l'annonce, qui est ici toujours la même
+            $advertSkill->setAdvert($advert);
+            //on la lie à la compétence, qui change ici dans la boucle foreach
+            $advertSkill->setSkill($skill);
+
+            // Arbitrairement, on dit que chaque compétence est requise au niveau 'Expert'
+            $advertSkill->setLevel('Expert');
+
+            // Et bien sûr, on persistes cette entité de relation, propriétaires des deux autres
+            $em->persist($advertSkill);
+        }
 
         // Étape 1 : On « persiste » l'entité
+        // Doctrine ne connait pas encore m'entité $advert. Si vous n'avez pas défini la relation Advertskill avec un cascade persist (ce qui est le cas) alors on doit persister $advert
         $em->persist($advert);
 
         // Étape 1 ter : pour cette relation pas de cascade lorsqu'on persiste Advert, car la relation est
@@ -176,13 +199,13 @@ class AdvertController extends Controller
             return $this->redirectToRoute('oc_platform_view', array('id' => 5));
         }
 
-        $advert = array(
+       /* $advert = array(
             'title'   => 'Recherche développpeur Symfony2',
             'id'      => $id,
             'author'  => 'Alexandre',
             'content' => 'Nous recherchons un développeur Symfony2 débutant sur Lyon. Blabla…',
             'date'    => new \Datetime()
-        );
+        );*/
 
         return $this->render('@OCPlatform2/Advert/edit.html.twig', array(
             'advert' => $advert
